@@ -26,11 +26,19 @@ func BenchmarkGetVideoDuration(b *testing.B) {
 
 func BenchmarkValidateURL(b *testing.B) {
 	testURLs := []string{
+		// YouTube
 		"https://www.youtube.com/watch?v=dQw4w9WgXcQ",
 		"https://youtu.be/dQw4w9WgXcQ",
-		"https://youtube.com/watch?v=dQw4w9WgXcQ",
+		// Other supported platforms
+		"https://vimeo.com/123456789",
+		"https://www.dailymotion.com/video/x123abc",
+		"https://twitter.com/user/status/123456789",
+		"https://www.tiktok.com/@user/video/123456789",
+		"https://www.twitch.tv/videos/123456789",
+		// Invalid URLs
 		"not-a-url",
-		"https://example.com",
+		"ftp://example.com/file",
+		"",
 	}
 
 	b.ResetTimer()

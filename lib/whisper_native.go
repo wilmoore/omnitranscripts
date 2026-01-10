@@ -3,9 +3,9 @@
 package lib
 
 /*
-#cgo CFLAGS: -I../vendor/whisper.cpp/include -I../vendor/whisper.cpp/ggml/include
-#cgo LDFLAGS: -L../vendor/whisper.cpp/build/src -L../vendor/whisper.cpp/build/ggml/src -L../vendor/whisper.cpp/build/ggml/src/ggml-blas -L../vendor/whisper.cpp/build/ggml/src/ggml-metal
-#cgo LDFLAGS: -Wl,-rpath,../vendor/whisper.cpp/build/src -Wl,-rpath,../vendor/whisper.cpp/build/ggml/src -Wl,-rpath,../vendor/whisper.cpp/build/ggml/src/ggml-blas -Wl,-rpath,../vendor/whisper.cpp/build/ggml/src/ggml-metal
+#cgo CFLAGS: -I../third_party/whisper.cpp/include -I../third_party/whisper.cpp/ggml/include
+#cgo LDFLAGS: -L../third_party/whisper.cpp/build/src -L../third_party/whisper.cpp/build/ggml/src -L../third_party/whisper.cpp/build/ggml/src/ggml-blas -L../third_party/whisper.cpp/build/ggml/src/ggml-metal
+#cgo LDFLAGS: -Wl,-rpath,../third_party/whisper.cpp/build/src -Wl,-rpath,../third_party/whisper.cpp/build/ggml/src -Wl,-rpath,../third_party/whisper.cpp/build/ggml/src/ggml-blas -Wl,-rpath,../third_party/whisper.cpp/build/ggml/src/ggml-metal
 #cgo LDFLAGS: -lwhisper -lggml -lggml-base -lggml-cpu -lm -lstdc++
 #cgo darwin LDFLAGS: -lggml-metal -lggml-blas
 #cgo darwin LDFLAGS: -framework Accelerate -framework Metal -framework Foundation -framework CoreGraphics

@@ -1,15 +1,37 @@
 openapi: 3.0.0
 info:
-  title: VideoTranscript.app API
-  description: API for transcribing YouTube videos using Whisper
+  title: OmniTranscripts API
+  description: |
+    Universal Media Transcription Engine - Transcribe audio and video from 1000+ platforms.
+
+    **Key Features:**
+    - **Universal Platform Support**: YouTube, Vimeo, TikTok, Twitter, SoundCloud, Instagram, and 1000+ more via yt-dlp
+    - **Audio-First Design**: Direct audio file URLs are first-class citizens
+    - **Timestamp Precision**: Get word-level timestamps for subtitles
+    - **Async Processing**: Long videos process in background with job status polling
+
+    **Use Cases:**
+    - Content creators needing video subtitles
+    - Podcast transcription services
+    - Meeting recording analysis
+    - Social media content archival
+    - Accessibility compliance
   version: 1.0.0
   contact:
-    name: VideoTranscript.app
-    url: https://videotranscript.app
+    name: OmniTranscripts
+    url: https://omnitranscripts.io
+  x-logo:
+    url: https://omnitranscripts.io/logo.png
+  termsOfService: https://omnitranscripts.io/terms
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 
 servers:
-  - url: https://api.videotranscript.app
+  - url: https://api.omnitranscripts.io
     description: Production server
+  - url: http://localhost:3000
+    description: Local development
 
 security:
   - ApiKeyAuth: []
@@ -34,11 +56,22 @@ paths:
                     example: ok
                   message:
                     type: string
-                    example: VideoTranscript.app API is running
+                    example: OmniTranscripts API is running
 
   /transcribe:
     post:
-      summary: Transcribe a YouTube video
+      summary: Transcribe media from any URL
+      description: |
+        Submit a media URL for transcription. Supports 1000+ platforms including YouTube, Vimeo, TikTok, Twitter, SoundCloud, and direct audio file URLs.
+
+        **Processing:**
+        - Videos ≤2 minutes: Processed synchronously, returns transcript immediately
+        - Videos >2 minutes: Processed asynchronously, returns job_id for polling
+
+        **Supported Formats:**
+        - Video: MP4, WebM, MKV, MOV, AVI
+        - Audio: MP3, WAV, FLAC, M4A, OGG
+      operationId: transcribeMedia
       tags:
         - Transcription
       requestBody:
@@ -53,8 +86,21 @@ paths:
                 url:
                   type: string
                   format: uri
-                  description: YouTube video URL
+                  description: Media URL to transcribe (YouTube, Vimeo, TikTok, direct audio files, etc.)
                   example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+            examples:
+              youtube:
+                summary: YouTube video
+                value:
+                  url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              vimeo:
+                summary: Vimeo video
+                value:
+                  url: "https://vimeo.com/123456789"
+              directAudio:
+                summary: Direct audio file
+                value:
+                  url: "https://example.com/podcast-episode.mp3"
       responses:
         '200':
           description: Transcription result (for short videos) or job ID (for longer videos)
@@ -86,6 +132,15 @@ paths:
   /transcribe/{job_id}:
     get:
       summary: Get transcription job status and result
+      description: |
+        Poll this endpoint to check the status of an async transcription job.
+
+        **Job States:**
+        - `pending`: Job queued, waiting to start
+        - `running`: Transcription in progress
+        - `complete`: Transcription finished, results available
+        - `error`: Transcription failed, error message available
+      operationId: getTranscriptionJob
       tags:
         - Transcription
       parameters:
@@ -131,10 +186,20 @@ components:
         transcript:
           type: string
           description: Full transcript text
+          example: "Hello and welcome to this video tutorial..."
         segments:
           type: array
           items:
             $ref: '#/components/schemas/Segment'
+      example:
+        transcript: "Hello and welcome to this video tutorial. Today we'll learn about transcription APIs."
+        segments:
+          - start: 0.0
+            end: 2.5
+            text: "Hello and welcome to this video tutorial."
+          - start: 2.5
+            end: 5.0
+            text: "Today we'll learn about transcription APIs."
 
     JobResponse:
       type: object
@@ -142,6 +207,9 @@ components:
         job_id:
           type: string
           description: Unique job identifier
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      example:
+        job_id: "123e4567-e89b-12d3-a456-426614174000"
 
     JobStatus:
       type: object

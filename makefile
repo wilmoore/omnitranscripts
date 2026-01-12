@@ -1,14 +1,14 @@
-# VideoTranscript.app Makefile
-# Encore.go-based API for transcribing YouTube videos
+# OmniTranscripts Makefile
+# Universal Media Transcription Engine
 
 # Variables
-BINARY_NAME=videotranscript-app
+BINARY_NAME=omnitranscripts
 GO_VERSION=1.23
 MAIN_PACKAGE=.
 BUILD_DIR=build
 DIST_DIR=dist
 COVERAGE_DIR=coverage
-DOCKER_IMAGE=videotranscript-app
+DOCKER_IMAGE=omnitranscripts
 DOCKER_TAG=latest
 
 # Get git info for versioning
@@ -28,7 +28,7 @@ NC=\033[0m # No Color
 
 .PHONY: help
 help: ## Show this help message
-	@echo "$(BLUE)VideoTranscript.app - Available Commands$(NC)"
+	@echo "$(BLUE)OmniTranscripts - Available Commands$(NC)"
 	@echo "======================================"
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make $(GREEN)<target>$(NC)\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  $(GREEN)%-15s$(NC) %s\n", $$1, $$2 } /^##@/ { printf "\n$(BLUE)%s$(NC)\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
@@ -252,7 +252,7 @@ setup-models: ## Download whisper models for offline transcription
 .PHONY: setup-env-example
 setup-env-example: ## Create example environment file
 	@echo "$(BLUE)Creating .env.example...$(NC)"
-	@echo "# VideoTranscript.app Configuration" > .env.example
+	@echo "# OmniTranscripts Configuration" > .env.example
 	@echo "PORT=3000" >> .env.example
 	@echo "API_KEY=your-api-key-here" >> .env.example
 	@echo "" >> .env.example

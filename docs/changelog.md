@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to VideoTranscript.app will be documented in this file.
+All notable changes to OmniTranscripts will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2024-01-15
 
 ### Added
-- Initial release of VideoTranscript.app
+- Initial release of OmniTranscripts
 - YouTube video transcription API with Go backend
 - Dual framework support (Fiber and Encore.dev)
 - Three-stage processing pipeline (download, normalize, transcribe)
@@ -93,8 +93,8 @@ See [CONTRIBUTING.md](contributing.md) for details on how to contribute to this 
 ## Support
 
 - **Documentation**: [docs/](./README.md)
-- **Issues**: [GitHub Issues](https://github.com/wilmoore/VideoTranscript.app/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/wilmoore/VideoTranscript.app/discussions)
+- **Issues**: [GitHub Issues](https://github.com/wilmoore/OmniTranscripts/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/wilmoore/OmniTranscripts/discussions)
 
 ## License
 

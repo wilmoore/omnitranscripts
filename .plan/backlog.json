@@ -1,6 +1,18 @@
 {
-  "lastSequence": 1,
+  "lastSequence": 6,
   "items": [
+    {
+      "id": 6,
+      "title": "Test verification and API marketplace preparation",
+      "description": "Run comprehensive tests to verify production readiness, fix stale VideoTranscript naming references, create API marketplace tracking list, and prepare RapidAPI integration (OpenAPI spec, pricing tiers, documentation).",
+      "category": "chore",
+      "severity": "medium",
+      "fingerprint": "chore|6|test-and-marketplace-prep",
+      "source": "/pro:chore",
+      "sourceBranch": "chore/test-and-marketplace-prep",
+      "createdAt": "2026-01-10T10:00:00Z",
+      "status": "in-progress"
+    },
     {
       "id": 1,
       "title": "Rename VideoTranscript to OmniTranscripts",
@@ -13,6 +25,54 @@
       "createdAt": "2026-01-09T00:00:00Z",
       "status": "completed",
       "completedAt": "2026-01-10T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "title": "Fix Command Injection Risk in web-dashboard.go",
+      "description": "User-controlled input (job.VideoID, url) is passed directly to exec.Command() without proper sanitization. The pgrep -f command and yt-dlp command in web-dashboard.go:3297 and web-dashboard.go:3507 could be vulnerable to command injection if VideoID or URL contains shell metacharacters. Remediation: Validate and sanitize VideoID to ensure it only contains expected characters (alphanumeric, hyphens). URL validation should be strengthened.",
+      "category": "security",
+      "severity": "high",
+      "fingerprint": "SEC-INJ-001",
+      "source": "/pro:audit",
+      "sourceBranch": "main",
+      "createdAt": "2026-01-10T09:43:37Z",
+      "status": "pending"
+    },
+    {
+      "id": 3,
+      "title": "Implement Duration Parsing",
+      "description": "The parseDuration() function in engine/engine.go:189-191 and lib/transcription.go:268-270 returns a hardcoded value of 120 seconds instead of actually parsing the duration. This affects the sync/async processing decision logic. Remediation: Implement actual duration parsing from yt-dlp output format (e.g., 'HH:MM:SS' or 'MM:SS').",
+      "category": "debt",
+      "severity": "high",
+      "fingerprint": "QUA-TODO-001",
+      "source": "/pro:audit",
+      "sourceBranch": "main",
+      "createdAt": "2026-01-10T09:43:37Z",
+      "status": "pending"
+    },
+    {
+      "id": 4,
+      "title": "Add Unit Tests for Core Packages",
+      "description": "Several core packages have no test files: config/ (no unit tests for configuration loading), engine/ (no unit tests for transcription engine), jobs/ (no unit tests for job queue operations). Remediation: Add unit tests for these packages, especially for configuration validation and job state transitions.",
+      "category": "tests",
+      "severity": "medium",
+      "fingerprint": "QUA-TEST-001",
+      "source": "/pro:audit",
+      "sourceBranch": "main",
+      "createdAt": "2026-01-10T09:43:37Z",
+      "status": "pending"
+    },
+    {
+      "id": 5,
+      "title": "Replace Debug Logging with Structured Logging",
+      "description": "Production code contains numerous fmt.Printf and fmt.Println statements instead of using structured logging: lib/transcription.go (15+ instances), engine/engine.go (10+ instances), web-dashboard.go (5+ instances including console.log in embedded JS). Remediation: Replace with structured logging (e.g., log.Printf with proper log levels, or a logging library like zap/zerolog).",
+      "category": "debt",
+      "severity": "medium",
+      "fingerprint": "QUA-LOG-001",
+      "source": "/pro:audit",
+      "sourceBranch": "main",
+      "createdAt": "2026-01-10T09:43:37Z",
+      "status": "pending"
     }
   ]
 }

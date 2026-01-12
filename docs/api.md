@@ -1,6 +1,6 @@
 # API Documentation
 
-VideoTranscript.app provides a simple REST API for transcribing YouTube videos with support for both synchronous and asynchronous processing.
+OmniTranscripts provides a simple REST API for transcribing YouTube videos with support for both synchronous and asynchronous processing.
 
 ## Base URL
 
@@ -30,7 +30,7 @@ Check API health status. No authentication required.
 ```json
 {
   "status": "ok",
-  "message": "VideoTranscript.app API is running"
+  "message": "OmniTranscripts API is running"
 }
 ```
 
@@ -219,7 +219,7 @@ When transcription completes, subtitle files are automatically generated:
 ### JavaScript/Node.js
 
 ```javascript
-class VideoTranscriptAPI {
+class OmniTranscriptsAPI {
   constructor(apiKey, baseURL = 'http://localhost:3000') {
     this.apiKey = apiKey;
     this.baseURL = baseURL;
@@ -262,7 +262,7 @@ class VideoTranscriptAPI {
 }
 
 // Usage
-const api = new VideoTranscriptAPI('your-api-key');
+const api = new OmniTranscriptsAPI('your-api-key');
 const result = await api.transcribe('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
 
 if (result.job_id) {
@@ -279,7 +279,7 @@ if (result.job_id) {
 import requests
 import time
 
-class VideoTranscriptAPI:
+class OmniTranscriptsAPI:
     def __init__(self, api_key, base_url='http://localhost:3000'):
         self.api_key = api_key
         self.base_url = base_url
@@ -310,7 +310,7 @@ class VideoTranscriptAPI:
             time.sleep(poll_interval)
 
 # Usage
-api = VideoTranscriptAPI('your-api-key')
+api = OmniTranscriptsAPI('your-api-key')
 result = api.transcribe('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
 
 if 'job_id' in result:

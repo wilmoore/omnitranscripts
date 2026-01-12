@@ -1,17 +1,17 @@
-# Contributing to VideoTranscript.app
+# Contributing to OmniTranscripts
 
-Thank you for your interest in contributing to VideoTranscript.app! This guide will help you get started with contributing to this YouTube video transcription API.
+Thank you for your interest in contributing to OmniTranscripts! This guide will help you get started with contributing to this YouTube video transcription API.
 
 ## Quick Start for Contributors
 
 ### 1. Fork and Clone
 ```bash
 # Fork the repository on GitHub, then clone your fork
-git clone https://github.com/YOUR_USERNAME/VideoTranscript.app.git
-cd VideoTranscript.app
+git clone https://github.com/YOUR_USERNAME/OmniTranscripts.git
+cd OmniTranscripts
 
 # Add upstream remote
-git remote add upstream https://github.com/wilmoore/VideoTranscript.app.git
+git remote add upstream https://github.com/wilmoore/OmniTranscripts.git
 ```
 
 ### 2. Set Up Development Environment
@@ -73,7 +73,7 @@ Job fails with timeout error after 5 minutes
 ## Environment
 - Go version: 1.23.0
 - OS: Ubuntu 22.04
-- VideoTranscript.app version: main branch
+- OmniTranscripts version: main branch
 ```
 
 ### ✨ Feature Requests
@@ -459,4 +459,4 @@ May be invited to become maintainers with additional responsibilities.
 - [GitHub Flow](https://guides.github.com/introduction/flow/)
 - [Semantic Versioning](https://semver.org/)
 
-Thank you for contributing to VideoTranscript.app! Your contributions help make video transcription more accessible and powerful for everyone.
+Thank you for contributing to OmniTranscripts! Your contributions help make video transcription more accessible and powerful for everyone.

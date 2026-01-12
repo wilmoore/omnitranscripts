@@ -1,12 +1,12 @@
 # Deployment Guide
 
-This guide covers various deployment options for VideoTranscript.app, from local development to production-scale deployments.
+This guide covers various deployment options for OmniTranscripts, from local development to production-scale deployments.
 
 ## Quick Deployment Options
 
 ### 1. Docker (Recommended)
 
-The fastest way to get VideoTranscript.app running in any environment.
+The fastest way to get OmniTranscripts running in any environment.
 
 #### Using Pre-built Image (Coming Soon)
 ```bash
@@ -21,8 +21,8 @@ docker run -d \
 #### Build from Source
 ```bash
 # Clone the repository
-git clone https://github.com/wilmoore/VideoTranscript.app.git
-cd VideoTranscript.app
+git clone https://github.com/wilmoore/OmniTranscripts.git
+cd OmniTranscripts
 
 # Build the Docker image
 docker build -t videotranscript-app .
@@ -324,14 +324,14 @@ sudo mkdir -p /usr/local/share/whisper
 sudo cp models/ggml-base.en.bin /usr/local/share/whisper/
 
 # Deploy application
-git clone https://github.com/wilmoore/VideoTranscript.app.git
-cd VideoTranscript.app
+git clone https://github.com/wilmoore/OmniTranscripts.git
+cd OmniTranscripts
 go build -o videotranscript-app
 
 # Create systemd service
 sudo tee /etc/systemd/system/videotranscript.service > /dev/null <<EOF
 [Unit]
-Description=VideoTranscript.app API
+Description=OmniTranscripts API
 After=network.target
 
 [Service]
@@ -635,4 +635,4 @@ rules:
     cooldown: 600s
 ```
 
-This deployment guide provides comprehensive options for running VideoTranscript.app in any environment, from development to enterprise-scale production deployments.
+This deployment guide provides comprehensive options for running OmniTranscripts in any environment, from development to enterprise-scale production deployments.

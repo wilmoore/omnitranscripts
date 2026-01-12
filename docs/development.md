@@ -1,6 +1,6 @@
 # Development Guide
 
-This guide covers everything you need to know for developing and contributing to VideoTranscript.app.
+This guide covers everything you need to know for developing and contributing to OmniTranscripts.
 
 ## Quick Start
 
@@ -37,8 +37,8 @@ pip install openai-whisper
 
 ```bash
 # Clone the repository
-git clone https://github.com/wilmoore/VideoTranscript.app.git
-cd VideoTranscript.app
+git clone https://github.com/wilmoore/OmniTranscripts.git
+cd OmniTranscripts
 
 # Install Go dependencies
 go mod tidy
@@ -134,7 +134,7 @@ LOG_LEVEL=debug
 
 ### Project Layout
 ```
-VideoTranscript.app/
+OmniTranscripts/
 ├── main.go                 # Fiber server entry point
 ├── web-dashboard.go        # Development dashboard
 ├── config/                 # Configuration management
@@ -655,4 +655,4 @@ Update `docs/changelog.md` with:
 - Breaking changes
 - Performance improvements
 
-This development guide provides everything needed to contribute effectively to VideoTranscript.app, from initial setup to advanced development workflows.
+This development guide provides everything needed to contribute effectively to OmniTranscripts, from initial setup to advanced development workflows.

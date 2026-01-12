@@ -70,7 +70,7 @@ const dashboardHTML = `
 <!DOCTYPE html>
 <html>
 <head>
-    <title>VideoTranscript Dashboard</title>
+    <title>OmniTranscripts Dashboard</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1284,7 +1284,7 @@ const dashboardHTML = `
             <div class="brand-section">
                 <div class="brand-logo">
                     <div class="logo-icon">🎬</div>
-                    <div class="brand-name">VideoTranscript</div>
+                    <div class="brand-name">OmniTranscripts</div>
                     <div class="brand-tagline">AI-Powered Transcription</div>
                 </div>
             </div>
@@ -2002,7 +2002,7 @@ const transactionDetailHTML = `
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Transaction Details - VideoTranscript</title>
+    <title>Transaction Details - OmniTranscripts</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -2638,7 +2638,7 @@ func main() {
 
 	port := findAvailablePort(8765)
 
-	fmt.Println("🚀 VideoTranscript Command Center starting...")
+	fmt.Println("🚀 OmniTranscripts Command Center starting...")
 	fmt.Printf("🌐 Dashboard: http://localhost:%d\n", port)
 	fmt.Printf("📊 API: http://localhost:%d/api/jobs\n", port)
 

@@ -2,7 +2,7 @@
 
 set -e
 
-echo "🚀 Running VideoTranscript.app Performance Tests"
+echo "🚀 Running OmniTranscripts Performance Tests"
 echo "================================================="
 
 # Colors for output
@@ -96,7 +96,7 @@ fi
 print_status "Generating performance report..."
 
 cat > test_results/performance_report.md << EOF
-# VideoTranscript.app Performance Report
+# OmniTranscripts Performance Report
 
 **Generated on:** $(date)
 **Go Version:** $GO_VERSION

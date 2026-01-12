@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# VideoTranscript.app - Whisper Model Download Script
+# OmniTranscripts - Whisper Model Download Script
 # Downloads pre-trained whisper models for offline transcription
 
 set -e
@@ -150,7 +150,7 @@ EOF
 }
 
 main() {
-    echo -e "${BLUE}VideoTranscript.app - Whisper Model Downloader${NC}"
+    echo -e "${BLUE}OmniTranscripts - Whisper Model Downloader${NC}"
     echo "=============================================="
 
     local model="${1:-$DEFAULT_MODEL}"

@@ -1,6 +1,6 @@
 # Architecture Documentation
 
-VideoTranscript.app is designed as a high-performance, scalable YouTube video transcription service built with Go and modern architectural patterns.
+OmniTranscripts is designed as a high-performance, scalable universal media transcription engine built with Go. It supports 1000+ platforms via yt-dlp with audio-first workflows as first-class citizens.
 
 ## Overview
 
@@ -17,7 +17,7 @@ The application follows a microservices-inspired architecture with clear separat
           └──────────────────────┼──────────────────────┘
                                  │
          ┌─────────────────────────────────────────────────────┐
-         │             VideoTranscript.app API                  │
+         │              OmniTranscripts API                      │
          └─────────────────────┬───────────────────────────────┘
                                │
     ┌──────────────────────────┼──────────────────────────────┐

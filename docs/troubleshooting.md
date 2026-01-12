@@ -1,6 +1,6 @@
 # Troubleshooting Guide
 
-This guide covers common issues and solutions when developing, deploying, or using VideoTranscript.app.
+This guide covers common issues and solutions when developing, deploying, or using OmniTranscripts.
 
 ## Common Issues
 

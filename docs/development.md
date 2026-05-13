@@ -100,6 +100,43 @@ The CLI tool directly uses the `engine/` package (ADR-0001: Dual Consumption Mod
 - Scripting and automation
 - Debugging the transcription pipeline
 
+#### CLI Output and Piping
+
+The transcribe CLI outputs **only the transcript text to stdout** and **progress/diagnostics to stderr**. This enables composable Unix workflows:
+
+##### Copy transcript to clipboard (macOS)
+```bash
+make transcribe URL="https://www.youtube.com/watch?v=dQw4w9WgXcQ" | pbcopy
+```
+
+##### Save transcript to file
+```bash
+make transcribe URL="https://www.youtube.com/watch?v=dQw4w9WgXcQ" > transcript.txt
+make transcribe URL="https://www.instagram.com/reel/ABC123/" >> all-transcripts.txt
+```
+
+##### Suppress progress output
+```bash
+make transcribe URL="https://www.youtube.com/watch?v=dQw4w9WgXcQ" 2>/dev/null | pbcopy
+```
+
+##### Get transcript statistics
+```bash
+# Word count
+make transcribe URL="..." 2>/dev/null | wc -w
+
+# Line count
+make transcribe URL="..." 2>/dev/null | wc -l
+
+# Search for keywords
+make transcribe URL="..." | grep -i "important"
+
+# Get first 10 lines
+make transcribe URL="..." | head -10
+```
+
+**Why separate output streams?** Progress and transcription status appears on stderr, so you see what's happening while piping the clean transcript to other tools. This follows Unix conventions for composable commands.
+
 ### Development Server Options
 
 #### Option 1: Standard Go Server (Fiber)

@@ -13,6 +13,32 @@
       "workingTree": "dirty",
       "recentCommit": "dd0444e Merge pull request #11 from wilmoore/fix/yt-dlp-youtube-shorts-403",
       "backlogSummary": "- In-progress items: unknown (no readable backlog)"
+    },
+    {
+      "id": "session-2026-05-13T20-49-34-584Z-fe6e7d3b",
+      "filename": "session-2026-05-13T20-49-34-584Z-fe6e7d3b.md",
+      "relativePath": "sessions/session-2026-05-13T20-49-34-584Z-fe6e7d3b.md",
+      "status": "pending",
+      "createdAt": "2026-05-13T20:49:34.584Z",
+      "updatedAt": "2026-05-13T20:49:34.584Z",
+      "trigger": "plugin.initialize",
+      "branch": "main",
+      "workingTree": "clean",
+      "recentCommit": "85e8b35 Merge pull request #13 from wilmoore/feat/add-download-make-target",
+      "backlogSummary": "- In-progress items: unknown (no readable backlog)"
+    },
+    {
+      "id": "session-2026-05-13T20-49-35-912Z-5af4f328",
+      "filename": "session-2026-05-13T20-49-35-912Z-5af4f328.md",
+      "relativePath": "sessions/session-2026-05-13T20-49-35-912Z-5af4f328.md",
+      "status": "pending",
+      "createdAt": "2026-05-13T20:49:35.912Z",
+      "updatedAt": "2026-05-13T20:49:35.912Z",
+      "trigger": "plugin.initialize",
+      "branch": "main",
+      "workingTree": "dirty",
+      "recentCommit": "85e8b35 Merge pull request #13 from wilmoore/feat/add-download-make-target",
+      "backlogSummary": "- In-progress items: unknown (no readable backlog)"
     }
   ]
 }

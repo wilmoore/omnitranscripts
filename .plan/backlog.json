@@ -1,5 +1,5 @@
 {
-  "lastSequence": 11,
+  "lastSequence": 12,
   "items": [
     {
       "id": 11,
@@ -139,6 +139,18 @@
       "sourceBranch": "main",
       "createdAt": "2026-01-10T09:43:37Z",
       "status": "pending"
+    },
+    {
+      "id": 12,
+      "title": "Add clipboard support to transcribe CLI",
+      "description": "Add make transcribe-clip target that automatically copies transcript to clipboard (cross-platform: macOS pbcopy, Linux xclip/xsel). Enables quick clipboard workflows for transcript extraction.",
+      "category": "chore",
+      "severity": "medium",
+      "fingerprint": "chore|12|clipboard-transcribe-output",
+      "source": "/pro:chore",
+      "sourceBranch": "chore/fix-clipboard-transcribe-output",
+      "createdAt": "2026-05-13T22:50:22Z",
+      "status": "in-progress"
     }
   ]
 }

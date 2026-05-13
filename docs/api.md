@@ -421,6 +421,86 @@ For detailed setup instructions, see [ChatGPT Integration Guide](chatgpt-integra
 
 ---
 
+## Command-Line Interface (CLI)
+
+The `make transcribe` command provides a convenient way to transcribe media without starting the HTTP server.
+
+### Basic Usage
+
+```bash
+# Transcribe a URL
+make transcribe URL="https://www.youtube.com/watch?v=VIDEO_ID"
+
+# Transcribe a local file
+make transcribe URL="/path/to/video.mp4"
+```
+
+### Output Handling
+
+The CLI outputs:
+- **stdout**: Clean transcript text (suitable for piping to other tools)
+- **stderr**: Progress messages and diagnostics
+
+This separation enables composable Unix workflows.
+
+### Copy to Clipboard
+
+```bash
+# macOS
+make transcribe URL="https://www.youtube.com/watch?v=VIDEO_ID" | pbcopy
+
+# Linux (xclip)
+make transcribe URL="https://www.youtube.com/watch?v=VIDEO_ID" | xclip -selection clipboard
+
+# Linux (xsel)
+make transcribe URL="https://www.youtube.com/watch?v=VIDEO_ID" | xsel --clipboard --input
+```
+
+### Save to File
+
+```bash
+# Save transcript
+make transcribe URL="https://www.youtube.com/watch?v=VIDEO_ID" > transcript.txt
+
+# Append to file
+make transcribe URL="..." >> all-transcripts.txt
+```
+
+### Suppress Progress Output
+
+```bash
+# Hide progress messages while piping
+make transcribe URL="..." 2>/dev/null | pbcopy
+```
+
+### Text Processing
+
+```bash
+# Word count
+make transcribe URL="..." 2>/dev/null | wc -w
+
+# Line count
+make transcribe URL="..." 2>/dev/null | wc -l
+
+# Search for keywords
+make transcribe URL="..." | grep -i "keyword"
+
+# Get first N lines
+make transcribe URL="..." | head -20
+```
+
+### Exit Codes
+
+- `0`: Success
+- `1`: Error (invalid URL, file not found, transcription failed, etc.)
+
+Check stderr for error details:
+```bash
+make transcribe URL="..." 2>&1 | head  # See error messages
+```
+
+---
+
 ## Webhooks (Coming Soon)
 
 Future versions will support webhook notifications for job completion:

@@ -59,6 +59,50 @@ go test -v -run TestPostTranscribe_ValidationErrors ./handlers
 
 **Complete command reference and development workflows:** [docs/development.md](docs/development.md)
 
+## CLI Output and Piping
+
+The `make transcribe` command outputs the transcript text to stdout and progress/diagnostics to stderr. This enables natural Unix piping for flexible workflows:
+
+### Copy transcript to clipboard
+```bash
+# macOS
+make transcribe URL="https://www.youtube.com/watch?v=dQw4w9WgXcQ" | pbcopy
+
+# Linux (xclip)
+make transcribe URL="https://www.youtube.com/watch?v=dQw4w9WgXcQ" | xclip -selection clipboard
+
+# Linux (xsel)
+make transcribe URL="https://www.youtube.com/watch?v=dQw4w9WgXcQ" | xsel --clipboard --input
+```
+
+### Save transcript to file
+```bash
+make transcribe URL="https://www.youtube.com/watch?v=dQw4w9WgXcQ" > transcript.txt
+make transcribe URL="https://www.instagram.com/reel/ABC123/" >> all-transcripts.txt
+```
+
+### Suppress progress output
+```bash
+make transcribe URL="https://www.youtube.com/watch?v=dQw4w9WgXcQ" 2>/dev/null | pbcopy
+```
+
+### Pipe to other tools
+```bash
+# Word count
+make transcribe URL="..." 2>/dev/null | wc -w
+
+# Search for keywords
+make transcribe URL="..." | grep -i "keyword"
+
+# Get first 20 lines
+make transcribe URL="..." | head -20
+
+# Line count
+make transcribe URL="..." 2>/dev/null | wc -l
+```
+
+**Note:** Progress and diagnostic information appears on stderr, allowing you to see transcription status while safely piping stdout to other commands.
+
 Environment configuration via `.env` file:
 ```bash
 PORT=3000

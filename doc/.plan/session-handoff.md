@@ -1,13 +1,21 @@
 # Session Handoff Ledger
 
-Updated: 2026-04-14T00:08:49.648Z
-Current session: session-2026-04-14T00-08-49-595Z-4e78988f
+Updated: 2026-05-13T20:49:35.950Z
+Current session: session-2026-05-13T20-49-35-912Z-5af4f328
 
-## Outstanding Snapshots (1)
+## Outstanding Snapshots (3)
 
 1. [pending] session-2026-04-14T00-08-49-595Z-4e78988f — feat/add-download-make-target (dirty)
    File: doc/.plan/session-handoff/sessions/session-2026-04-14T00-08-49-595Z-4e78988f.md
    Updated: 2026-04-14T00:08:49.595Z
+
+2. [pending] session-2026-05-13T20-49-34-584Z-fe6e7d3b — main (clean)
+   File: doc/.plan/session-handoff/sessions/session-2026-05-13T20-49-34-584Z-fe6e7d3b.md
+   Updated: 2026-05-13T20:49:34.584Z
+
+3. [pending] session-2026-05-13T20-49-35-912Z-5af4f328 — main (dirty)
+   File: doc/.plan/session-handoff/sessions/session-2026-05-13T20-49-35-912Z-5af4f328.md
+   Updated: 2026-05-13T20:49:35.912Z
 
 ## Recent Activity
 

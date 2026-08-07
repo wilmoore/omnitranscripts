@@ -131,3 +131,7 @@ make transcribe URL='...' > transcript.txt
 make transcribe URL='...' 2>/dev/null | wc -w  # Word count
 make transcribe URL='...' | grep -i "keyword"  # Search content
 ```
+
+## Related ADRs
+
+- [0005. Separate CLI Data and Diagnostic Streams](../../../doc/decisions/0005-separate-cli-data-and-diagnostic-streams.md)

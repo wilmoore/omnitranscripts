@@ -150,7 +150,8 @@
       "source": "/pro:chore",
       "sourceBranch": "chore/fix-clipboard-transcribe-output",
       "createdAt": "2026-05-13T22:50:22Z",
-      "status": "completed"
+      "status": "resolved",
+      "resolvedAt": "2026-08-08T13:48:47Z"
     }
   ]
 }

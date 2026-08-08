@@ -674,6 +674,92 @@ go tool pprof http://localhost:6060/debug/pprof/heap
 go tool pprof -http=:8080 profile.pb.gz
 ```
 
+## CLI and Output Issues
+
+### Clipboard Tool Not Found
+
+When using `make transcribe URL="..." | pbcopy` or clipboard piping, you may encounter clipboard tool errors.
+
+#### macOS
+- **pbcopy** is built-in to macOS
+- If missing, reinstall Command Line Tools:
+  ```bash
+  xcode-select --install
+  ```
+
+#### Linux - xclip (Recommended)
+```bash
+# Debian/Ubuntu
+sudo apt update && sudo apt install xclip
+
+# Fedora/RHEL
+sudo dnf install xclip
+
+# Arch
+sudo pacman -S xclip
+
+# Then use:
+make transcribe URL="..." | xclip -selection clipboard
+```
+
+#### Linux - xsel (Fallback)
+```bash
+# Debian/Ubuntu
+sudo apt install xsel
+
+# Fedora/RHEL
+sudo dnf install xsel
+
+# Arch
+sudo pacman -S xsel
+
+# Then use:
+make transcribe URL="..." | xsel --clipboard --input
+```
+
+#### Windows (WSL - Windows Subsystem for Linux)
+```bash
+# Use Windows clip.exe instead of pbcopy
+make transcribe URL="..." | clip.exe
+```
+
+#### No Clipboard Tool Available
+If no clipboard tool is installed and you can't install one:
+```bash
+# Save to file instead
+make transcribe URL="..." > transcript.txt
+
+# Or use Python if available
+make transcribe URL="..." | python3 -c "import sys; print(sys.stdin.read())"
+```
+
+### Transcript Not Appearing on Clipboard
+
+**Problem:** Running `make transcribe URL="..." | pbcopy` but transcript doesn't appear in clipboard.
+
+**Solution:** Verify the command is working correctly:
+```bash
+# Test without pbcopy - see transcript on screen
+make transcribe URL="..." 2>/dev/null
+
+# Check that pbcopy command works
+echo "test" | pbcopy && pbpaste  # Should output "test"
+
+# Check that pipe is working
+make transcribe URL="..." 2>/dev/null | wc -w  # Should show word count
+```
+
+### Too Much Output When Copying to Clipboard
+
+**Problem:** Clipboard contains progress messages along with transcript.
+
+**Solution:** Redirect stderr to /dev/null:
+```bash
+make transcribe URL="..." 2>/dev/null | pbcopy
+```
+
+This suppresses progress/diagnostic output on stderr and only copies the transcript to clipboard.
+
 ## Getting Help
 
 ### Log Analysis

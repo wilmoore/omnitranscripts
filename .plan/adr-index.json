@@ -1,5 +1,5 @@
 {
-  "lastSequence": 4,
+  "lastSequence": 5,
   "entries": [
     {
       "branch": "feature/rename-omnitranscripts",
@@ -20,6 +20,10 @@
     {
       "branch": "fix/yt-dlp-youtube-shorts-403",
       "adrs": ["0004-ytdlp-dependency-management.md"]
+    },
+    {
+      "branch": "chore/fix-clipboard-transcribe-output",
+      "adrs": ["0005-separate-cli-data-and-diagnostic-streams.md"]
     }
   ]
 }

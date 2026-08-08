@@ -34,18 +34,19 @@ func main() {
 	if !isURL {
 		// Check if local file exists
 		if _, err := os.Stat(input); os.IsNotExist(err) {
-			fmt.Printf("Error: File not found: %s\n", input)
+			fmt.Fprintf(os.Stderr, "Error: File not found: %s\n", input)
 			os.Exit(1)
 		}
 	}
 
-	fmt.Printf("Transcribing: %s\n", input)
+	// Print progress to stderr (not part of transcript output)
+	fmt.Fprintf(os.Stderr, "Transcribing: %s\n", input)
 	if isURL {
-		fmt.Println("Type: URL (downloading via yt-dlp)")
+		fmt.Fprintf(os.Stderr, "Type: URL (downloading via yt-dlp)\n")
 	} else {
-		fmt.Println("Type: Local file")
+		fmt.Fprintf(os.Stderr, "Type: Local file\n")
 	}
-	fmt.Println()
+	fmt.Fprintf(os.Stderr, "\n")
 
 	// Create a context with timeout for the transcription
 	// ADR-0003: Context propagation with appropriate timeouts
@@ -61,53 +62,42 @@ func main() {
 	opts.CacheDownloads = true // Cache downloads for CLI usage
 	result, err := engine.Transcribe(ctx, input, "cli-transcribe", opts)
 	if err != nil {
-		// Provide stage-specific error context
+		// Provide stage-specific error context to stderr
 		if tErr, ok := err.(*engine.TranscriptionError); ok {
-			fmt.Printf("Transcription failed at stage '%s': %s\n", tErr.Stage, tErr.Message)
+			fmt.Fprintf(os.Stderr, "Transcription failed at stage '%s': %s\n", tErr.Stage, tErr.Message)
 			if tErr.Err != nil {
-				fmt.Printf("  Cause: %v\n", tErr.Err)
+				fmt.Fprintf(os.Stderr, "  Cause: %v\n", tErr.Err)
 			}
 		} else {
-			fmt.Printf("Transcription failed: %v\n", err)
+			fmt.Fprintf(os.Stderr, "Transcription failed: %v\n", err)
 		}
 		os.Exit(1)
 	}
 
 	elapsed := time.Since(startTime)
 
-	// Print the transcript
-	fmt.Println("--- Transcript ---")
-	fmt.Println(result.Transcript)
-	fmt.Println()
+	// Output ONLY transcript to stdout (clean for piping)
+	fmt.Fprint(os.Stdout, result.Transcript)
 
-	// Print segments with timestamps
-	if len(result.Segments) > 0 {
-		fmt.Println("--- Segments ---")
-		for _, seg := range result.Segments {
-			fmt.Printf("[%0.1fs - %0.1fs] %s\n", seg.Start, seg.End, seg.Text)
-		}
-		fmt.Println()
-	}
-
-	// Print summary
-	fmt.Println("--- Summary ---")
-	fmt.Printf("Duration: %s\n", elapsed.Round(time.Second))
-	fmt.Printf("Segments: %d\n", len(result.Segments))
+	// Print diagnostic information to stderr
+	fmt.Fprintf(os.Stderr, "\n--- Summary ---\n")
+	fmt.Fprintf(os.Stderr, "Duration: %s\n", elapsed.Round(time.Second))
+	fmt.Fprintf(os.Stderr, "Segments: %d\n", len(result.Segments))
 }
 
 func printUsage() {
-	fmt.Println("Usage: go run main.go <url_or_file_path>")
-	fmt.Println()
-	fmt.Println("Examples:")
-	fmt.Println("  # Transcribe a YouTube video")
-	fmt.Println("  go run main.go https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-	fmt.Println()
-	fmt.Println("  # Transcribe an Instagram reel")
-	fmt.Println("  go run main.go https://www.instagram.com/reel/ABC123/")
-	fmt.Println()
-	fmt.Println("  # Transcribe a local file")
-	fmt.Println("  go run main.go /path/to/video.mp4")
-	fmt.Println()
-	fmt.Println("Or use the Makefile:")
-	fmt.Println("  make transcribe URL=\"https://youtube.com/watch?v=...\"")
+	fmt.Fprintf(os.Stderr, "Usage: go run main.go <url_or_file_path>\n")
+	fmt.Fprintf(os.Stderr, "\n")
+	fmt.Fprintf(os.Stderr, "Examples:\n")
+	fmt.Fprintf(os.Stderr, "  # Transcribe a YouTube video\n")
+	fmt.Fprintf(os.Stderr, "  go run main.go https://www.youtube.com/watch?v=dQw4w9WgXcQ\n")
+	fmt.Fprintf(os.Stderr, "\n")
+	fmt.Fprintf(os.Stderr, "  # Transcribe an Instagram reel\n")
+	fmt.Fprintf(os.Stderr, "  go run main.go https://www.instagram.com/reel/ABC123/\n")
+	fmt.Fprintf(os.Stderr, "\n")
+	fmt.Fprintf(os.Stderr, "  # Transcribe a local file\n")
+	fmt.Fprintf(os.Stderr, "  go run main.go /path/to/video.mp4\n")
+	fmt.Fprintf(os.Stderr, "\n")
+	fmt.Fprintf(os.Stderr, "Or use the Makefile:\n")
+	fmt.Fprintf(os.Stderr, "  make transcribe URL=\"https://youtube.com/watch?v=...\"\n")
 }

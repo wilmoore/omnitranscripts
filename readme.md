@@ -131,6 +131,27 @@ curl -L https://encore.dev/install.sh | bash
 encore deploy --env production
 ```
 
+### Command-Line Interface (CLI)
+
+For quick one-off transcriptions without starting a server:
+
+```bash
+# Copy transcript to clipboard (macOS)
+make transcribe URL="https://www.youtube.com/watch?v=..." | pbcopy
+
+# Save transcript to file
+make transcribe URL="https://www.youtube.com/watch?v=..." > transcript.txt
+
+# Get transcript statistics
+make transcribe URL="..." 2>/dev/null | wc -w  # Word count
+```
+
+The CLI is perfect for:
+- Quick transcriptions without server overhead
+- Automation and scripting
+- Integration with Unix pipelines
+- CI/CD workflows
+
 ## Usage
 
 ### As a Go Library

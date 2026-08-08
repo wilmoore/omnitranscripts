@@ -82,16 +82,16 @@ endif
 .PHONY: transcribe
 transcribe: ## Transcribe a URL or file (make transcribe URL="https://...")
 ifndef URL
-	@echo "$(RED)Error: URL is required$(NC)"
-	@echo "Usage: make transcribe URL=\"https://youtube.com/watch?v=...\""
-	@echo ""
-	@echo "Examples:"
-	@echo "  make transcribe URL=\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\""
-	@echo "  make transcribe URL=\"https://www.instagram.com/reel/ABC123/\""
-	@echo "  make transcribe URL=\"/path/to/video.mp4\""
+	@echo "$(RED)Error: URL is required$(NC)" >&2
+	@echo "Usage: make transcribe URL=\"https://youtube.com/watch?v=...\"" >&2
+	@echo "" >&2
+	@echo "Examples:" >&2
+	@echo "  make transcribe URL=\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\"" >&2
+	@echo "  make transcribe URL=\"https://www.instagram.com/reel/ABC123/\"" >&2
+	@echo "  make transcribe URL=\"/path/to/video.mp4\"" >&2
 	@exit 1
 endif
-	@echo "$(BLUE)Transcribing: $(URL)$(NC)"
+	@echo "$(BLUE)Transcribing: $(URL)$(NC)" >&2
 	@mkdir -p $(BUILD_DIR)
 	@CGO_ENABLED=1 go build -o $(BUILD_DIR)/transcribe examples/transcribe/main.go
 	@WHISPER_MODEL_PATH=models/ggml-base.en.bin $(BUILD_DIR)/transcribe "$(URL)"

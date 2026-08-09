@@ -1,8 +1,8 @@
 # Harden Dashboard Identifiers and Subprocess Inputs
 
-**Backlog:** 2  
-**Branch:** `fix/security-dashboard-input-hardening`  
-**Status:** Completed  
+**Backlog:** 2
+**Branch:** `fix/security-dashboard-input-hardening`
+**Status:** Completed
 **Started:** 2026-08-09T22:30:08Z
 
 ## Reconciliation

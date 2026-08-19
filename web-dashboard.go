@@ -11,11 +11,14 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
+
+	"omnitranscripts/internal/dashboardsecurity"
 )
 
 var startTime = time.Now()
@@ -2742,10 +2745,13 @@ func calculatePerformanceMetrics(data *DashboardData, jobs []Job) {
 	var totalStorage int64
 	for _, job := range jobs {
 		if job.Status == "completed" {
-			outputDir := fmt.Sprintf("transcripts/%s", job.VideoID)
+			outputDir, err := dashboardsecurity.Directory("transcripts", job.VideoID)
+			if err != nil {
+				continue
+			}
 			if files, err := os.ReadDir(outputDir); err == nil {
 				for _, file := range files {
-					if fileStat, err := os.Stat(fmt.Sprintf("%s/%s", outputDir, file.Name())); err == nil {
+					if fileStat, err := os.Stat(filepath.Join(outputDir, file.Name())); err == nil {
 						totalStorage += fileStat.Size()
 					}
 				}
@@ -2846,20 +2852,31 @@ func addJobHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	videoID := extractVideoID(req.URL)
+	mediaURL, err := dashboardsecurity.ParseMediaURL(req.URL)
+	if err != nil {
+		http.Error(w, "Invalid media URL: use an absolute HTTP(S) URL without embedded credentials", http.StatusBadRequest)
+		return
+	}
+
+	videoID := dashboardsecurity.MediaID(mediaURL)
+	outputDir, err := dashboardsecurity.Directory("transcripts", videoID)
+	if err != nil {
+		http.Error(w, "Invalid media identifier", http.StatusBadRequest)
+		return
+	}
 	jobID := generateJobID()
 
 	job := Job{
 		ID:            jobID,
 		VideoID:       videoID,
-		URL:           req.URL,
+		URL:           mediaURL.String(),
 		Title:         "Loading...",
 		Status:        "queued",
 		Progress:      0,
 		StartTime:     time.Now(),
 		UpdateTime:    time.Now(),
 		LogFile:       fmt.Sprintf("logs/%s.log", jobID),
-		OutputDir:     fmt.Sprintf("transcripts/%s", videoID),
+		OutputDir:     outputDir,
 		Duration:      "00:00",
 		FileCount:     0,
 		FileSize:      "0 KB",
@@ -2987,6 +3004,10 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "No transcript available for this job", 404)
 		return
 	}
+	if err := dashboardsecurity.ValidateIdentifier(job.VideoID); err != nil {
+		http.Error(w, "Invalid stored media identifier", http.StatusInternalServerError)
+		return
+	}
 
 	// Generate content based on format
 	var content string
@@ -3109,8 +3130,15 @@ func logsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Try to read the log file
-	content, err := os.ReadFile(job.LogFile)
+	logPath, err := dashboardsecurity.File("logs", job.ID, ".log")
+	if err != nil {
+		http.Error(w, "Invalid stored job identifier", http.StatusInternalServerError)
+		return
+	}
+
+	// Derive the log path from the validated job ID instead of trusting the
+	// persisted LogFile field.
+	content, err := os.ReadFile(logPath)
 	if err != nil {
 		http.Error(w, "Log file not found or could not be read", 404)
 		return
@@ -3118,7 +3146,7 @@ func logsHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Set headers
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.Header().Set("Content-Disposition", fmt.Sprintf("inline; filename=\"%s_log.txt\"", job.VideoID))
+	w.Header().Set("Content-Disposition", fmt.Sprintf("inline; filename=\"%s.log.txt\"", job.ID))
 
 	// Write content
 	w.Write(content)
@@ -3272,8 +3300,14 @@ func updateJobStatuses(jobs []Job) {
 }
 
 func updateJobStatus(job *Job) {
+	outputDir, err := dashboardsecurity.Directory("transcripts", job.VideoID)
+	if err != nil {
+		markInvalidIdentifier(job)
+		return
+	}
+
 	// Load metadata if available
-	metadataPath := fmt.Sprintf("transcripts/%s/metadata.json", job.VideoID)
+	metadataPath := filepath.Join(outputDir, "metadata.json")
 	if metadataData, err := os.ReadFile(metadataPath); err == nil {
 		var metadata map[string]interface{}
 		if json.Unmarshal(metadataData, &metadata) == nil {
@@ -3288,13 +3322,25 @@ func updateJobStatus(job *Job) {
 
 	// If title is still "Loading...", try to fetch it directly with yt-dlp
 	if job.Title == "Loading..." && job.URL != "" {
-		if title := fetchVideoTitle(job.URL); title != "" {
+		mediaURL, err := dashboardsecurity.ParseMediaURL(job.URL)
+		if err != nil {
+			job.Status = "failed"
+			job.StatusText = "Invalid media URL"
+			job.UpdateTime = time.Now()
+			return
+		}
+		if title := fetchVideoTitle(mediaURL.String()); title != "" {
 			job.Title = title
 		}
 	}
 
 	// Check if transcription process is running
-	cmd := exec.Command("pgrep", "-f", fmt.Sprintf("transcribe.*%s", job.VideoID))
+	processPattern, err := dashboardsecurity.ProcessPattern(job.VideoID)
+	if err != nil {
+		markInvalidIdentifier(job)
+		return
+	}
+	cmd := exec.Command("pgrep", "-f", processPattern)
 	if output, err := cmd.Output(); err == nil && len(strings.TrimSpace(string(output))) > 0 {
 		status, progress := parseJobProgress(job)
 		job.Status = status
@@ -3306,7 +3352,6 @@ func updateJobStatus(job *Job) {
 	}
 
 	// Check if completed
-	outputDir := fmt.Sprintf("transcripts/%s", job.VideoID)
 	if files, err := os.ReadDir(outputDir); err == nil && len(files) > 0 {
 		if job.Status != "completed" {
 			// Only update status and stats if not already completed
@@ -3356,14 +3401,17 @@ func updateJobStats(job *Job) {
 	}
 
 	// Calculate file size
-	outputDir := fmt.Sprintf("transcripts/%s", job.VideoID)
+	outputDir, err := dashboardsecurity.Directory("transcripts", job.VideoID)
+	if err != nil {
+		return
+	}
 	if stat, err := os.Stat(outputDir); err == nil && stat.IsDir() {
 		var totalSize int64
 		files, _ := os.ReadDir(outputDir)
 		job.FileCount = len(files)
 
 		for _, file := range files {
-			if fileStat, err := os.Stat(fmt.Sprintf("%s/%s", outputDir, file.Name())); err == nil {
+			if fileStat, err := os.Stat(filepath.Join(outputDir, file.Name())); err == nil {
 				totalSize += fileStat.Size()
 			}
 		}
@@ -3373,9 +3421,11 @@ func updateJobStats(job *Job) {
 
 func parseJobProgress(job *Job) (string, int) {
 	logFiles := []string{
-		job.LogFile,
 		"transcription.log",
 		"nohup.out",
+	}
+	if jobLog, err := dashboardsecurity.File("logs", job.ID, ".log"); err == nil {
+		logFiles = append([]string{jobLog}, logFiles...)
 	}
 
 	for _, logFile := range logFiles {
@@ -3433,15 +3483,6 @@ func extractTitleFromLog(filename string) string {
 		}
 	}
 	return ""
-}
-
-func extractVideoID(url string) string {
-	re := regexp.MustCompile(`(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/)([a-zA-Z0-9_-]{11})`)
-	matches := re.FindStringSubmatch(url)
-	if len(matches) >= 2 {
-		return matches[1]
-	}
-	return "unknown"
 }
 
 func generateJobID() string {
@@ -3504,12 +3545,18 @@ func calculateBusinessMetrics(data *DashboardData, jobs []Job) {
 // fetchVideoTitle fetches the video title using yt-dlp
 func fetchVideoTitle(url string) string {
 	// Use yt-dlp to get just the title
-	cmd := exec.Command("yt-dlp", "--get-title", "--no-warnings", url)
+	cmd := exec.Command("yt-dlp", "--get-title", "--no-warnings", "--", url)
 	output, err := cmd.Output()
 	if err != nil {
 		return ""
 	}
 	return strings.TrimSpace(string(output))
+}
+
+func markInvalidIdentifier(job *Job) {
+	job.Status = "failed"
+	job.StatusText = "Invalid media identifier"
+	job.UpdateTime = time.Now()
 }
 
 // reloadCheckHandler returns file modification timestamp for live reload
